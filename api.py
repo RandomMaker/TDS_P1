@@ -103,6 +103,7 @@ def execute_function_call(function_call):
 
 @app.post("/run")
 def run_task(task: str = Query(..., description="Task description")):
+    task = urllib.parse.quote(task)
     tools = [
         convert_function_to_openai_schema(func) for func in function_mappings.values()
     ]
@@ -112,9 +113,7 @@ def run_task(task: str = Query(..., description="Task description")):
     # )
 
     try:
-        function_call_response_message = parse_task_description(
-            urllib.parse.quote(task), tools
-        )
+        function_call_response_message = parse_task_description(task, tools)
         # print(function_call_response_message)
         if function_call_response_message["tool_calls"]:
             for tool in function_call_response_message["tool_calls"]:
