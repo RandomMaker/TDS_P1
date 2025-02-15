@@ -273,7 +273,7 @@ def query_database(db_file: str, output_file: str, query: str, query_params: Tup
 
 def extract_specific_text_using_llm(input_file: str, output_file: str, task: str):
     """
-    Extracts specific text from a file using an LLM and writes it to an output file.
+    Extracts specific text(doesn't count) from a file using an LLM and writes it to an output file.
 
     Args:
         input_file (str): The file that contains the text to extract.
@@ -463,7 +463,7 @@ def count_occurrences(
     custom_pattern: Optional[str] = None,
 ):
     """
-    Count occurrences of specific date components or custom patterns in a file and write the count to an output file. Handles various date formats automatically.
+    Counts the occurrences of any day, month, year or custom patterns in a file and write the count to an output file. Handles various date formats automatically.
     Args:
         input_file (str): Path to the input file containing dates or text lines.
         output_file (str): Path to the output file where the count will be written.

@@ -62,7 +62,7 @@ def parse_task_description(task_description: str, tools: list):
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are an intelligent agent that understands and parses tasks. You quickly identify the best tool funcions to use to give the desired results",
+                    "content": "You are an intelligent agent fluent in multiple human languages that understands and parses tasks. You quickly identify the best tool funcions to use to give the desired results using minimal functions",
                 },
                 {"role": "user", "content": task_description},
             ],
