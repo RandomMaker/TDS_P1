@@ -1,3 +1,4 @@
+import urllib.parse
 import json
 import logging
 import traceback
@@ -24,9 +25,9 @@ from function_tasks import (
 
 
 load_dotenv()
-API_KEY = os.getenv("OPEN_AI_PROXY_TOKEN")
-URL_CHAT = os.getenv("OPEN_AI_PROXY_URL")
-URL_EMBEDDING = os.getenv("OPEN_AI_EMBEDDING_URL")
+API_KEY = os.getenv("AIPROXY_TOKEN")
+URL_CHAT = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions"
+URL_EMBEDDING = "https://aiproxy.sanand.workers.dev/openai/v1/embeddings"
 
 app = FastAPI()
 
@@ -111,7 +112,9 @@ def run_task(task: str = Query(..., description="Task description")):
     # )
 
     try:
-        function_call_response_message = parse_task_description(task, tools)
+        function_call_response_message = parse_task_description(
+            urllib.parse.quote(task), tools
+        )
         # print(function_call_response_message)
         if function_call_response_message["tool_calls"]:
             for tool in function_call_response_message["tool_calls"]:
@@ -137,4 +140,4 @@ def read_file(path: str = Query(..., description="File path to read")):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="localhost", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

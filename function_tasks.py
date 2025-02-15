@@ -44,9 +44,9 @@ import re
 
 dotenv.load_dotenv()
 
-API_KEY = os.getenv("OPEN_AI_PROXY_TOKEN")
-URL_CHAT = os.getenv("OPEN_AI_PROXY_URL")
-URL_EMBEDDING = os.getenv("OPEN_AI_EMBEDDING_URL")
+API_KEY = os.getenv("AIPROXY_TOKEN")
+URL_CHAT = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions"
+URL_EMBEDDING = "https://aiproxy.sanand.workers.dev/openai/v1/embeddings"
 RUNNING_IN_CODESPACES = "CODESPACES" in os.environ
 RUNNING_IN_DOCKER = os.path.exists("/.dockerenv")
 logging.basicConfig(level=logging.INFO)

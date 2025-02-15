@@ -1,5 +1,9 @@
 FROM python:3.12-slim-bookworm
 
+RUN apt-get update
+RUN apt-get install tk -y
+RUN apt-get install curl -y
+
 # Set the working directory in the container
 WORKDIR /app
 
