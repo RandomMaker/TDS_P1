@@ -283,7 +283,7 @@ def extract_specific_text_using_llm(input_file: str, output_file: str, task: str
         None
     """
     input_file_path = ensure_local_path(input_file)
-    with open(input_file_path, "r") as file:
+    with open(input_file_path, "rw") as file:
         text_info = file.read()  # readlines gives list, this gives string
     output_file_path = ensure_local_path(output_file)
     response = query_gpt(text_info, task)  # recieved in json format
