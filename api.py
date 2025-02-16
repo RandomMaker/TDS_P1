@@ -106,13 +106,13 @@ def parse_task_description(task_description: str, tools: list):
             "tool_choice": "required",
         },
     )
-    # logging.info(
-    # "********************************************** PRINTING RESPONSE START************************************"
-    # )
-    # print(response.json())
-    # logging.info(
-    # "********************************************** PRINTING RESPONSE END************************************"
-    # )
+    logging.info(
+        "********************************************** PRINTING RESPONSE START************************************"
+    )
+    print(response.json())
+    logging.info(
+        "********************************************** PRINTING RESPONSE END************************************"
+    )
     return response.json()["choices"][0]["message"]
 
 

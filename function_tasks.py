@@ -141,6 +141,7 @@ def convert_function_to_openai_schema(func: Callable) -> dict:
                 "additionalProperties": schema.get("additionalProperties", False),
             },
             "strict": True,
+            # "additionalProperties": False,
         },
     }
 
@@ -562,29 +563,38 @@ ADD generated response to double check dynamically
 def fetch_data_from_api_and_save(
     url: str,
     output_file: str,
-    params: Optional[Dict[str, Any]] = None,
+    params: list,
 ):
     """
-    This tool function fetches data from an API using a GET request and saves the response to a JSON file.
-    It also tries POST if GET fails with some params.
+    Fetch data from an API using either a GET or POST request and save the response to a JSON file.
 
-    Example 1: URL: "https://api.example.com/users" Output File: "users.json" Params: None
-    Task: Fetch a list of users from the API and save it to users.json.
-    Output: Function generates a user.json file with the contents received from the api request.
+    The function first attempts to make a GET request to the provided URL. If the GET request fails (due to
+    an exception), the function then attempts to make a POST request using the parameters provided in `params`.
 
-    Example 2: URL: "https://api.example.com/products" Output File: "products.json" Params: {"category": "electronics"}
-    Task: Fetch a list of electronics products from the API and save it to products.json.
-    Output: Function generates a products.json file with the contents received from the api request.
+    If either request is successful, the response data is saved to the specified output file in JSON format.
+    In case of any error (e.g., network issues, server errors), an error message is printed.
 
-    Example 3: URL: "https://api.example.com/items" Output File: "items.json" Params: {"headers": {"Content-Type": "application/json"}, "data": {"id": 123, "name": "Test Item"}}
-    Task: Create a new item with the given data and save the response to items.json
-    Output: Function generates an items.json file with the contents received from the api request.
+    Parameters:
+        url (str): The URL of the API endpoint to fetch data from. This URL should point to an existing API endpoint.
+        output_file (str): The path to the file where the fetched data will be saved as a JSON file.
+        params: List that contains a single dictionary of parameters. If `params` is provided, it is assumed to be
+                                            in the form:
+                                              - If GET request: `params = [{}]` (can be empty)
+                                              - If POST request: `params = [{"headers": {...}, "data": {...}}]`
+                                            The "headers" dictionary contains any HTTP headers to be sent with the POST request,
+                                            and the "data" dictionary contains the body content to be sent as part of the POST request.
 
-    Args:
-        url (str): The URL of the API endpoint.
-        output_file (str): The path to the output file where the data will be saved.
-        params (Optional[Dict[str, Any]]): The parameters to include in the request. Defaults to None. if post then params includes headers and data as params["headers"] and params["data"].
+    Returns:
+        None: The function saves the response data to a JSON file and does not return any value.
 
+    Raises:
+        requests.exceptions.RequestException: If both the GET and POST requests fail (e.g., network issues, bad URL, server error),
+                                              an exception is raised and an error message is printed.
+
+    Notes:
+        - The GET request is attempted first. If it fails (e.g., due to a 4xx or 5xx HTTP error), a POST request is tried.
+        - For POST requests, both headers and data need to be supplied in `params` for the request to be constructed properly.
+        - If both GET and POST requests fail, the error message will be printed, and the function will not save any file.
     """
     try:
         response = requests.get(url)
@@ -596,7 +606,7 @@ def fetch_data_from_api_and_save(
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data from API: {e}")
     try:
-        response = requests.post(url, params["headers"], params["data"])
+        response = requests.post(url, params[0]["headers"], params[0]["data"])
         response.raise_for_status()
         data = response.json()
         with open(output_file, "w") as file:
@@ -604,6 +614,8 @@ def fetch_data_from_api_and_save(
 
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data from API: {e}")
+    except Exception as e:
+        print(f"Unable to do a post request, {e}")
 
 
 # Clone a git repo and make a commit
@@ -670,7 +682,7 @@ def run_sql_query_on_database(
 
 # Scrape a webpage
 def scrape_webpage(
-    url: str, output_file: str = None, tag: str = None, attrs: dict = None
+    url: str, output_file: str = None, tag: str = None, attrs: list = None
 ):
     """
     Scrapes a website, extracting either specific tags or the entire HTML content.
@@ -679,14 +691,14 @@ def scrape_webpage(
     url (str): The URL of the website to scrape.
     output_file (str, optional): The file path where the scraped content will be saved. If not provided, no file will be saved.
     tag (str, optional): The specific HTML tag to extract. If not provided, the entire HTML page will be scraped.
-    attrs (dict, optional): A dictionary of attributes to filter the tag by (e.g., {'class': 'example'}).
+    attrs (list, optional): A list that contains a single dictionary element of attributes to filter the tag by (e.g., [{'class': 'example'}]).
                             Used only if a tag is specified.
 
     Returns:
     str: The extracted HTML content or an error message.
 
     Example:
-    >>> scrape_webpage('https://www.example.com', tag='p', attrs={'class': 'description'})
+    >>> scrape_webpage('https://www.example.com', tag='p', attrs=[{'class': 'description'}])
     'This is an example paragraph with the class description.'
 
     >>> scrape_webpage('https://www.example.com', output_file='page.html')
@@ -703,7 +715,7 @@ def scrape_webpage(
 
         # Extract specific tag(s) or the entire HTML content
         if tag:
-            elements = soup.find_all(tag, attrs=attrs)
+            elements = soup.find_all(tag, attrs=attrs[0])
             extracted_content = "\n".join(str(element) for element in elements)
         else:
             extracted_content = soup.prettify()
@@ -818,7 +830,7 @@ def convert_markdown_to_html(input_file: str, output_file: str):
         html_content = markdown.markdown(md_content)
 
         # Write the HTML content to the output file
-        with open(output_file, "rw", encoding="utf-8") as file:
+        with open(output_file, "wr+", encoding="utf-8") as file:
             file.write(html_content)
 
         print(
