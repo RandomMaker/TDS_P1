@@ -15,14 +15,38 @@ from function_tasks import (
     extract_specific_content_and_create_index,
     extract_specific_text_using_llm,
     extract_text_from_image,
+    fetch_data_from_api_and_save,
     format_file_with_prettier,
     get_similar_text_using_embeddings,
     install_and_run_script,
     process_and_write_logfiles,
     query_database,
     sort_json_by_keys,
+    clone_git_repo_and_commit,
+    run_sql_query_on_database,
+    scrape_webpage,
+    compress_image,
+    transcribe_audio,
+    convert_markdown_to_html,
+    filter_csv,
 )
 
+"""
+
+████████╗██████╗ ███████╗    ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗     ██╗                                              
+╚══██╔══╝██╔══██╗██╔════╝    ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝    ███║                                              
+   ██║   ██║  ██║███████╗    ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║       ╚██║                                              
+   ██║   ██║  ██║╚════██║    ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║        ██║                                              
+   ██║   ██████╔╝███████║    ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║        ██║                                              
+   ╚═╝   ╚═════╝ ╚══════╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝        ╚═╝                                              
+                          ██████╗ ██╗   ██╗    ███████╗ █████╗ ██████╗ ██╗    ██╗ █████╗ ███╗   ██╗ ██████╗          ██╗ █████╗ ██╗███╗   ██╗
+                          ██╔══██╗╚██╗ ██╔╝    ██╔════╝██╔══██╗██╔══██╗██║    ██║██╔══██╗████╗  ██║██╔════╝          ██║██╔══██╗██║████╗  ██║
+                █████╗    ██████╔╝ ╚████╔╝     ███████╗███████║██████╔╝██║ █╗ ██║███████║██╔██╗ ██║██║  ███╗         ██║███████║██║██╔██╗ ██║
+                ╚════╝    ██╔══██╗  ╚██╔╝      ╚════██║██╔══██║██╔══██╗██║███╗██║██╔══██║██║╚██╗██║██║   ██║    ██   ██║██╔══██║██║██║╚██╗██║
+                          ██████╔╝   ██║       ███████║██║  ██║██║  ██║╚███╔███╔╝██║  ██║██║ ╚████║╚██████╔╝    ╚█████╔╝██║  ██║██║██║ ╚████║
+                          ╚═════╝    ╚═╝       ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝      ╚════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
+                                                                                                                                             
+"""
 
 load_dotenv()
 API_KEY = os.getenv("AIPROXY_TOKEN")
@@ -36,7 +60,8 @@ logging.basicConfig(level=logging.INFO)
 DATA_DIR = Path("../")
 DATA_DIR.mkdir(exist_ok=True)  # Ensure data directory exists
 
-function_mappings: Dict[str, Callable] = {
+task_a_function_mappings: Dict[str, Callable] = {
+    # TASK A
     "install_and_run_script": install_and_run_script,
     "format_file_with_prettier": format_file_with_prettier,
     "count_occurrences": count_occurrences,
@@ -47,7 +72,18 @@ function_mappings: Dict[str, Callable] = {
     "extract_text_from_image": extract_text_from_image,
     "get_similar_text_using_embeddings": get_similar_text_using_embeddings,
     "query_database": query_database,
+    # TASK B
+    "fetch_data_from_api_and_save": fetch_data_from_api_and_save,
+    "clone_git_repo_and_commit": clone_git_repo_and_commit,
+    "run_sql_query_on_database": run_sql_query_on_database,
+    "scrape_webpage": scrape_webpage,
+    "compress_image": compress_image,
+    "transcribe_audio": transcribe_audio,
+    "convert_markdown_to_html": convert_markdown_to_html,
+    "filter_csv": filter_csv,
 }
+
+task_b_function_mappings: Dict[str, callable] = {}
 
 
 def parse_task_description(task_description: str, tools: list):
@@ -85,7 +121,7 @@ def execute_function_call(function_call):
     try:
         function_name = function_call["name"]
         function_args = json.loads(function_call["arguments"])
-        function_to_call = function_mappings.get(function_name)
+        function_to_call = task_a_function_mappings.get(function_name)
         # print("Calling function: ", function_name)
         # print("Arguments ", function_args)
         if function_to_call:
@@ -105,7 +141,8 @@ def execute_function_call(function_call):
 def run_task(task: str = Query(..., description="Task description")):
     task = urllib.parse.quote(task)
     tools = [
-        convert_function_to_openai_schema(func) for func in function_mappings.values()
+        convert_function_to_openai_schema(func)
+        for func in task_a_function_mappings.values()
     ]
 
     # logging.info(

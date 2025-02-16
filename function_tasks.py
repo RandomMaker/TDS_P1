@@ -14,6 +14,30 @@
 # ]
 # ///
 
+# TTTTTTTTTTTTTTTTTTTTTTDDDDDDDDDDDDD           SSSSSSSSSSSSSSS      PPPPPPPPPPPPPPPPP   RRRRRRRRRRRRRRRRR        OOOOOOOOO               JJJJJJJJJJJEEEEEEEEEEEEEEEEEEEEEE       CCCCCCCCCCCCCTTTTTTTTTTTTTTTTTTTTTTT       1111111
+# T:::::::::::::::::::::TD::::::::::::DDD      SS:::::::::::::::S     P::::::::::::::::P  R::::::::::::::::R     OO:::::::::OO             J:::::::::JE::::::::::::::::::::E    CCC::::::::::::CT:::::::::::::::::::::T      1::::::1
+# T:::::::::::::::::::::TD:::::::::::::::DD   S:::::SSSSSS::::::S     P::::::PPPPPP:::::P R::::::RRRRRR:::::R  OO:::::::::::::OO           J:::::::::JE::::::::::::::::::::E  CC:::::::::::::::CT:::::::::::::::::::::T     1:::::::1
+# T:::::TT:::::::TT:::::TDDD:::::DDDDD:::::D  S:::::S     SSSSSSS     PP:::::P     P:::::PRR:::::R     R:::::RO:::::::OOO:::::::O          JJ:::::::JJEE::::::EEEEEEEEE::::E C:::::CCCCCCCC::::CT:::::TT:::::::TT:::::T     111:::::1
+# TTTTTT  T:::::T  TTTTTT  D:::::D    D:::::D S:::::S                   P::::P     P:::::P  R::::R     R:::::RO::::::O   O::::::O            J:::::J    E:::::E       EEEEEEC:::::C       CCCCCCTTTTTT  T:::::T  TTTTTT        1::::1
+# T:::::T          D:::::D     D:::::DS:::::S                   P::::P     P:::::P  R::::R     R:::::RO:::::O     O:::::O            J:::::J    E:::::E            C:::::C                      T:::::T                1::::1
+# T:::::T          D:::::D     D:::::D S::::SSSS                P::::PPPPPP:::::P   R::::RRRRRR:::::R O:::::O     O:::::O            J:::::J    E::::::EEEEEEEEEE  C:::::C                      T:::::T                1::::1
+# T:::::T          D:::::D     D:::::D  SS::::::SSSSS           P:::::::::::::PP    R:::::::::::::RR  O:::::O     O:::::O            J:::::j    E:::::::::::::::E  C:::::C                      T:::::T                1::::l
+# T:::::T          D:::::D     D:::::D    SSS::::::::SS         P::::PPPPPPPPP      R::::RRRRRR:::::R O:::::O     O:::::O            J:::::J    E:::::::::::::::E  C:::::C                      T:::::T                1::::l
+# T:::::T          D:::::D     D:::::D       SSSSSS::::S        P::::P              R::::R     R:::::RO:::::O     O:::::OJJJJJJJ     J:::::J    E::::::EEEEEEEEEE  C:::::C                      T:::::T                1::::l
+# T:::::T          D:::::D     D:::::D            S:::::S       P::::P              R::::R     R:::::RO:::::O     O:::::OJ:::::J     J:::::J    E:::::E            C:::::C                      T:::::T                1::::l
+# T:::::T          D:::::D    D:::::D             S:::::S       P::::P              R::::R     R:::::RO::::::O   O::::::OJ::::::J   J::::::J    E:::::E       EEEEEEC:::::C       CCCCCC        T:::::T                1::::l
+#   TT:::::::TT      DDD:::::DDDDD:::::D  SSSSSSS     S:::::S     PP::::::PP          RR:::::R     R:::::RO:::::::OOO:::::::OJ:::::::JJJ:::::::J  EE::::::EEEEEEEE:::::E C:::::CCCCCCCC::::C      TT:::::::TT           111::::::111
+#   T:::::::::T      D:::::::::::::::DD   S::::::SSSSSS:::::S     P::::::::P          R::::::R     R:::::R OO:::::::::::::OO  JJ:::::::::::::JJ   E::::::::::::::::::::E  CC:::::::::::::::C      T:::::::::T           1::::::::::1
+#   T:::::::::T      D::::::::::::DDD     S:::::::::::::::SS      P::::::::P          R::::::R     R:::::R   OO:::::::::OO      JJ:::::::::JJ     E::::::::::::::::::::E    CCC::::::::::::C      T:::::::::T           1::::::::::1
+#   TTTTTTTTTTT      DDDDDDDDDDDDD         SSSSSSSSSSSSSSS        PPPPPPPPPP          RRRRRRRR     RRRRRRR     OOOOOOOOO          JJJJJJJJJ       EEEEEEEEEEEEEEEEEEEEEE       CCCCCCCCCCCCC      TTTTTTTTTTT           11111111111
+
+#                                                                              #
+#                         TDS PROJECT 1                                        #
+#                         Coded by: SARWANG JAIN                               #
+#                       Email: 23f2002635@ds.study.iitm.ac.in                  #
+#                          "Creativity in code leads to endless possibilities" #
+################################################################################
+
 from pathlib import Path
 from tkinter import Image
 import dotenv
@@ -538,15 +562,27 @@ ADD generated response to double check dynamically
 def fetch_data_from_api_and_save(
     url: str,
     output_file: str,
-    generated_prompt: str,
     params: Optional[Dict[str, Any]] = None,
 ):
     """
-    This tool function fetches data from an API using a GET request and saves the response to a JSON file. It also tries POST if GET fails with some params. Example 1: URL: "https://api.example.com/users" Output File: "users.json" Params: None Task: "Fetch a list of users from the API and save it to users.json." Task: Fetch a list of users from the API and save it to users.json. Generated Prompt: "I need to retrieve a list of users from the API at https://api.example.com/users and save the data in JSON format to a file named users.json.  Could you make a GET request to that URL and save the response to the specified file?" Example 2: URL: "https://api.example.com/products" Output File: "products.json" Params: {"category": "electronics"} Task: "Fetch a list of electronics products from the API and save it to products.json." Task: Fetch a list of electronics products from the API and save it to products.json. Generated Prompt: "I'm looking for a list of electronics products. The API endpoint is https://api.example.com/products.  I need to include the parameter 'category' with the value 'electronics' in the request.  Could you make a GET request with this parameter and save the JSON response to a file named products.json?" Example 3: URL: "https://api.example.com/items" Output File: "items.json" Params: {"headers": {"Content-Type": "application/json"}, "data": {"id": 123, "name": "Test Item"}} Task: "Create a new item with the given data and save the response to items.json" Task: Create a new item with the given data and save the response to items.json Generated Prompt: "I need to create a new item using the API at https://api.example.com/items.  The request should be a POST request. The request should contain the header 'Content-Type' as 'application/json' and the data as a JSON object with the id '123' and name 'Test Item'. Save the JSON response to a file named items.json." Args: url (str): The URL of the API endpoint. output_file (str): The path to the output file where the data will be saved. params (Optional[Dict[str, Any]]): The parameters to include in the request. Defaults to None. if post then params includes headers and data as params["headers"] and params["data"].
+    This tool function fetches data from an API using a GET request and saves the response to a JSON file.
+    It also tries POST if GET fails with some params.
+
+    Example 1: URL: "https://api.example.com/users" Output File: "users.json" Params: None
+    Task: Fetch a list of users from the API and save it to users.json.
+    Output: Function generates a user.json file with the contents received from the api request.
+
+    Example 2: URL: "https://api.example.com/products" Output File: "products.json" Params: {"category": "electronics"}
+    Task: Fetch a list of electronics products from the API and save it to products.json.
+    Output: Function generates a products.json file with the contents received from the api request.
+
+    Example 3: URL: "https://api.example.com/items" Output File: "items.json" Params: {"headers": {"Content-Type": "application/json"}, "data": {"id": 123, "name": "Test Item"}}
+    Task: Create a new item with the given data and save the response to items.json
+    Output: Function generates an items.json file with the contents received from the api request.
+
     Args:
         url (str): The URL of the API endpoint.
         output_file (str): The path to the output file where the data will be saved.
-        generated_prompt (str): The prompt to generate from the task.
         params (Optional[Dict[str, Any]]): The parameters to include in the request. Defaults to None. if post then params includes headers and data as params["headers"] and params["data"].
 
     """
@@ -556,6 +592,7 @@ def fetch_data_from_api_and_save(
         data = response.json()
         with open(output_file, "w") as file:
             json.dump(data, file, indent=4)
+            return
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data from API: {e}")
     try:
@@ -564,6 +601,7 @@ def fetch_data_from_api_and_save(
         data = response.json()
         with open(output_file, "w") as file:
             json.dump(data, file, indent=4)
+
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data from API: {e}")
 
@@ -578,9 +616,14 @@ def clone_git_repo_and_commit(repo_url: str, output_dir: str, commit_message: st
         commit_message (str): The commit message to use when committing changes.
     """
     try:
-        subprocess.run(["git", "clone", repo_url, output_dir])
-        subprocess.run(["git", "add", "."], cwd=output_dir)
-        subprocess.run(["git", "commit", "-m", commit_message], cwd=output_dir)
+        subprocess.run(["git", "clone", repo_url, output_dir], shell=True, check=True)
+        subprocess.run(["git", "add", "."], cwd=output_dir, shell=True, check=True)
+        subprocess.run(
+            ["git", "commit", "-m", commit_message],
+            cwd=output_dir,
+            shell=True,
+            check=True,
+        )
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
 
@@ -625,42 +668,343 @@ def run_sql_query_on_database(
             conn.close()
 
 
-# Extract data from (i.e. scrape) a website
-def scrape_webpage(url: str, output_file: str):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    with open(output_file, "w") as file:
-        file.write(soup.prettify())
+# Scrape a webpage
+def scrape_webpage(
+    url: str, output_file: str = None, tag: str = None, attrs: dict = None
+):
+    """
+    Scrapes a website, extracting either specific tags or the entire HTML content.
+
+    Parameters:
+    url (str): The URL of the website to scrape.
+    output_file (str, optional): The file path where the scraped content will be saved. If not provided, no file will be saved.
+    tag (str, optional): The specific HTML tag to extract. If not provided, the entire HTML page will be scraped.
+    attrs (dict, optional): A dictionary of attributes to filter the tag by (e.g., {'class': 'example'}).
+                            Used only if a tag is specified.
+
+    Returns:
+    str: The extracted HTML content or an error message.
+
+    Example:
+    >>> scrape_webpage('https://www.example.com', tag='p', attrs={'class': 'description'})
+    'This is an example paragraph with the class description.'
+
+    >>> scrape_webpage('https://www.example.com', output_file='page.html')
+    (Saves the entire HTML content to page.html)
+    """
+
+    try:
+        # Send an HTTP GET request to the website
+        response = requests.get(url)
+        response.raise_for_status()  # Will raise an HTTPError for bad responses (4xx, 5xx)
+
+        # Parse the page content using BeautifulSoup
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Extract specific tag(s) or the entire HTML content
+        if tag:
+            elements = soup.find_all(tag, attrs=attrs)
+            extracted_content = "\n".join(str(element) for element in elements)
+        else:
+            extracted_content = soup.prettify()
+
+        # If an output file is provided, save the content
+        if output_file:
+            with open(output_file, "w", encoding="utf-8") as file:
+                file.write(extracted_content)
+
+        return extracted_content
+
+    except requests.exceptions.RequestException as e:
+        return f"An error occurred: {e}"
 
 
-# Compress or resize an image
-def compress_image(input_file: str, output_file: str, quality: int = 50):
-    img = Image.open(input_file)
-    img.save(output_file, quality=quality)
+def compress_image(
+    input_path: str,
+    output_path: str,
+    method: str = "quality",
+    quality: int = 80,
+    new_size: tuple = None,
+    to_format: str = None,
+):
+    """
+    Compresses an image using various methods: quality reduction, resizing, format change, or color depth reduction.
+
+    Parameters:
+    input_path (str): The file path of the image to be compressed.
+    output_path (str): The file path to save the compressed image.
+    method (str, optional): The method of compression to use. Options: 'quality', 'resize', 'format', 'grayscale'. Default is 'quality'.
+    quality (int, optional): The quality of the compressed image (0 to 100). Default is 80. Used if method='quality'.
+    new_size (tuple, optional): The new size for resizing. If not provided, resizing will not occur. Used if method='resize'.
+    to_format (str, optional): The new format to save the image in. Default is None. Used if method='format'.
+
+    Returns:
+    None
+
+    Example:
+    >>> compress_image('input_image.jpg', 'compressed_image.jpg', method='resize', new_size=(800, 600))
+    (Resizes the image and saves it as 'compressed_image.jpg')
+    """
+    try:
+        # Open the image file
+        with Image.open(input_path) as img:
+            # Apply the compression method based on the specified method
+            if method == "quality":
+                # Compress the image by reducing its quality
+                img.save(output_path, quality=quality, optimize=True)
+                print(
+                    f"Image successfully compressed with quality {quality} and saved as {output_path}"
+                )
+
+            elif method == "resize":
+                # Resize the image
+                if new_size:
+                    img = img.resize(new_size, Image.ANTIALIAS)
+                    img.save(output_path)
+                    print(f"Image resized to {new_size} and saved as {output_path}")
+                else:
+                    print("Error: new_size must be specified for resizing.")
+
+            elif method == "format":
+                # Change the image format (e.g., JPEG to WebP)
+                if to_format:
+                    img.save(output_path, format=to_format, optimize=True)
+                    print(f"Image saved as {to_format} format at {output_path}")
+                else:
+                    print("Error: to_format must be specified for changing the format.")
+
+            elif method == "grayscale":
+                # Convert image to grayscale (reduces color depth)
+                img = img.convert("L")  # 'L' mode is for grayscale
+                img.save(output_path)
+                print(f"Image converted to grayscale and saved as {output_path}")
+
+            else:
+                print(
+                    f"Invalid method: {method}. Choose 'quality', 'resize', 'format', or 'grayscale'."
+                )
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 # Transcribe audio from an MP3 file
 def transcribe_audio(input_file: str, output_file: str):
-    transcript = "Transcribed text"  # Placeholder
+    transcript = (
+        "You want me to perform such a tedious task. GO to hell!!!!"  # Placeholder
+    )
     with open(output_file, "w") as file:
         file.write(transcript)
 
 
 # Convert Markdown to HTML
 def convert_markdown_to_html(input_file: str, output_file: str):
-    with open(input_file, "r") as file:
-        html = markdown.markdown(file.read())
-    with open(output_file, "w") as file:
-        file.write(html)
+    """
+    Converts a Markdown file to HTML and saves the output to an HTML file.
+
+    Parameters:
+    input_file (str): The path to the input Markdown (.md) file.
+    output_file (str): The path where the resulting HTML file will be saved.
+
+    Returns:
+    None
+    """
+    try:
+        # Open and read the Markdown file
+        with open(input_file, "r") as file:
+            md_content = file.read()
+
+        # Convert Markdown to HTML
+        html_content = markdown.markdown(md_content)
+
+        # Write the HTML content to the output file
+        with open(output_file, "rw", encoding="utf-8") as file:
+            file.write(html_content)
+
+        print(
+            f"Markdown file successfully converted to HTML and saved as {output_file}"
+        )
+
+    except FileNotFoundError:
+        print(f"Error: The file {input_file} does not exist.")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
-# Write an API endpoint that filters a CSV file and returns JSON data
-def filter_csv(input_file: str, column: str, value: str, output_file: str):
-    results = []
-    with open(input_file, newline="") as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            if row[column] == value:
-                results.append(row)
-    with open(output_file, "w") as file:
-        json.dump(results, file)
+# Filters a csv file
+def filter_csv(
+    input_file: str, filters: list, output_file: str, output_format: str = "json"
+):
+    """
+    Filters the rows of a CSV file by multiple conditions and saves the results to an output file.
+
+    Parameters:
+    input_file (str): Path to the input CSV file.
+    filters (list): A list of filter conditions in the form of functions or dictionaries. Each condition can be:
+                    - A dictionary with a column name and value to match (e.g., {"column_name": "value"}).
+                    - A function that takes a row (dictionary) and returns True or False (for complex conditions).
+    output_file (str): The path to the output file where the filtered data will be saved.
+    output_format (str): The format of the output file ('json' or 'csv'). Default is 'json'.
+
+    Returns:
+    None
+
+    Example Usages:
+
+    1. **Filter by Exact Match (Equality) in a Column:**
+       ```python
+       filters = [
+           {"age": "30"}  # Filter rows where 'age' is exactly 30
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.json', output_format='json')
+       ```
+       This will filter rows where the `"age"` column equals `"30"`, and save the result as `filtered_data.json`.
+
+    2. **Filter by Multiple Exact Matches:**
+       ```python
+       filters = [
+           {"age": "30"},      # Filter rows where 'age' is 30
+           {"city": "New York"}  # Filter rows where 'city' is "New York"
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.csv', output_format='csv')
+       ```
+       This will filter rows where `"age"` is `"30"` and `"city"` is `"New York"`, and save the result as `filtered_data.csv`.
+
+    3. **Filter Using a Custom Function (Age Greater Than 30):**
+       ```python
+       filters = [
+           lambda row: int(row["age"]) > 30  # Filter rows where 'age' is greater than 30
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.json', output_format='json')
+       ```
+       This will filter rows where `"age"` is greater than 30, and save the result as `filtered_data.json`.
+
+    4. **Filter Using a Combination of Custom Functions (Age Greater Than 25 and City Not "Los Angeles"):**
+       ```python
+       filters = [
+           lambda row: int(row["age"]) > 25,  # Filter rows where 'age' > 25
+           lambda row: row["city"] != "Los Angeles"  # Filter rows where 'city' is not "Los Angeles"
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.csv', output_format='csv')
+       ```
+       This will filter rows where `"age"` is greater than 25 and `"city"` is not `"Los Angeles"`, and save the result as `filtered_data.csv`.
+
+    5. **Filter Using a Range Condition (Age Between 25 and 30):**
+       ```python
+       filters = [
+           lambda row: 25 <= int(row["age"]) <= 30  # Filter rows where 'age' is between 25 and 30
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.json', output_format='json')
+       ```
+       This will filter rows where `"age"` is between 25 and 30 (inclusive), and save the result as `filtered_data.json`.
+
+    6. **Advanced Use Case: Complex Filters with Multiple Functions and Exact Matches (Age > 30, City is New York, and Name starts with 'D'):**
+       ```python
+       filters = [
+           lambda row: int(row["age"]) > 30,  # Filter rows where 'age' > 30
+           {"city": "New York"},  # Filter rows where 'city' is "New York"
+           lambda row: row["name"].startswith("D")  # Filter rows where 'name' starts with "D"
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.csv', output_format='csv')
+       ```
+       This will filter rows where `"age"` is greater than 30, `"city"` is `"New York"`, and `"name"` starts with `"D"`, and save the result as `filtered_data.csv`.
+
+    7. **Using an Invalid Output Format:**
+       ```python
+       filters = [
+           {"age": "30"}  # Filter rows where 'age' is exactly 30
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.txt', output_format='txt')  # Invalid format
+       ```
+       This will raise a `ValueError` because `"txt"` is not a valid format. The valid formats are `"json"` and `"csv"`.
+
+    8. **Filter and Save Results in CSV Format:**
+       ```python
+       filters = [
+           {"city": "Chicago"}  # Filter rows where 'city' is "Chicago"
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.csv', output_format='csv')
+       ```
+       This will filter rows where `"city"` is `"Chicago"` and save the result as `filtered_data.csv`.
+
+    9. **Filter and Save Results in JSON Format:**
+       ```python
+       filters = [
+           {"name": "David"}  # Filter rows where 'name' is "David"
+       ]
+       filter_csv('data.csv', filters, 'filtered_data.json', output_format='json')
+       ```
+       This will filter rows where `"name"` is `"David"` and save the result as `filtered_data.json`.
+
+    Notes:
+    - The function accepts a **list of filters** where each filter is either:
+        - A dictionary (e.g., `{"column_name": value}`) for exact value matching, or
+        - A callable function that takes a row (dictionary) and returns `True` or `False` based on custom filtering logic.
+    - The `output_format` can either be `"json"` or `"csv"`. If the format is invalid, a `ValueError` will be raised.
+    - If no rows match the filter conditions, the output file will be empty.
+
+    """
+    filtered_rows = []
+
+    # Open and read the CSV file
+    try:
+        with open(input_file, mode="r", newline="", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+
+            # Iterate over each row in the CSV
+            for row in reader:
+                # Check if the row satisfies all the filter conditions
+                if all(
+                    apply_filter(row, filter_condition) for filter_condition in filters
+                ):
+                    filtered_rows.append(row)
+            if output_format == "json":
+                with open(output_file, mode="w", encoding="utf-8") as outfile:
+                    json.dump(
+                        filtered_rows, outfile, indent=4
+                    )  # Save as pretty-printed JSON
+            elif output_format == "csv":
+                if filtered_rows:
+                    with open(
+                        output_file, mode="w", newline="", encoding="utf-8"
+                    ) as outfile:
+                        writer = csv.DictWriter(
+                            outfile, fieldnames=filtered_rows[0].keys()
+                        )
+                        writer.writeheader()  # Write the header (column names)
+                        writer.writerows(filtered_rows)  # Write the filtered rows
+            else:
+                raise ValueError("Invalid output format. Please use 'json' or 'csv'.")
+
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The file '{input_file}' was not found.")
+    except KeyError as e:
+        raise KeyError(f"The column '{e.args[0]}' was not found in the CSV file.")
+    except Exception as e:
+        raise Exception(f"An error occurred: {e}")
+
+
+def apply_filter(row, filter_condition):
+    """
+    Applies a filter condition to a row. The filter can be a key-value pair or a function.
+
+    Parameters:
+    row (dict): The row (a dictionary) from the CSV file.
+    filter_condition (dict or function): The filter condition to apply.
+
+    Returns:
+    bool: Whether the row satisfies the filter condition.
+    """
+    if isinstance(filter_condition, dict):
+        # Simple equality check if filter is a dictionary
+        column = list(filter_condition.keys())[0]
+        value = filter_condition[column]
+        return row.get(column) == value
+    elif callable(filter_condition):
+        # If the filter is a function, apply it to the row
+        return filter_condition(row)
+    else:
+        raise ValueError(
+            "Invalid filter condition. It should be either a dictionary or a function."
+        )
