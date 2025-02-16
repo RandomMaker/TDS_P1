@@ -158,11 +158,10 @@ def run_task(task: str = Query(..., description="Task description")):
         return {"status": "success", "message": "Task executed successfully"}
     except Exception as e:
         error_details = traceback.format_exc()
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error executing function in run_task: {str(e)}",
-            headers={"X-Traceback": error_details},
-        )
+        return {
+            "status": "concern",
+            "message": f"Task may not be executed successfully. Error: {error_details}",
+        }
 
 
 @app.get("/read", response_class=PlainTextResponse)

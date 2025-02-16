@@ -309,7 +309,7 @@ def extract_specific_text_using_llm(input_file: str, output_file: str, task: str
         None
     """
     input_file_path = ensure_local_path(input_file)
-    with open(input_file_path, "rw") as file:
+    with open(input_file_path, "r+") as file:
         text_info = file.read()  # readlines gives list, this gives string
     output_file_path = ensure_local_path(output_file)
     response = query_gpt(text_info, task)  # recieved in json format
@@ -349,7 +349,7 @@ def get_similar_text_using_embeddings(
     input_file_path = ensure_local_path(input_file)
     output_file_path = ensure_local_path(output_file)
 
-    with open(input_file_path, "r") as file:
+    with open(input_file_path, "r+") as file:
         documents = file.readlines()
 
     documents = [comment.strip() for comment in documents]
@@ -416,7 +416,7 @@ def extract_specific_content_and_create_index(
 
     for extenstion_file in extenstion_files:
         title = None
-        with open(extenstion_file, "r", encoding="utf-8") as file:
+        with open(extenstion_file, "r+", encoding="utf-8") as file:
             for line in file:
                 if line.startswith(content_marker):
                     title = line.lstrip(content_marker).strip()
@@ -453,7 +453,7 @@ def process_and_write_logfiles(
 
     with open(output_file_path, "w") as outfile:
         for log_file in recent_logs:
-            with open(log_file, "r") as infile:
+            with open(log_file, "r+") as infile:
                 for _ in range(num_of_lines):
                     line = infile.readline()
                     if line:
@@ -472,7 +472,7 @@ def sort_json_by_keys(input_file: str, output_file: str, keys: list):
     """
     input_file_path = ensure_local_path(input_file)
     output_file_path = ensure_local_path(output_file)
-    with open(input_file_path, "r") as file:
+    with open(input_file_path, "r+") as file:
         data = json.load(file)
 
     sorted_data = sorted(data, key=lambda x: tuple(x[key] for key in keys))
@@ -500,7 +500,7 @@ def count_occurrences(
     count = 0
     input_file_path = ensure_local_path(input_file)
     output_file_path = ensure_local_path(output_file)
-    with open(input_file_path, "r") as file:
+    with open(input_file_path, "r+") as file:
         for line in file:
             line = line.strip()
             if not line:
@@ -821,7 +821,7 @@ def convert_markdown_to_html(input_file: str, output_file: str):
     """
     try:
         # Open and read the Markdown file
-        with open(input_file, "r") as file:
+        with open(input_file, "r+") as file:
             md_content = file.read()
 
         # Convert Markdown to HTML
@@ -959,7 +959,7 @@ def filter_csv(
 
     # Open and read the CSV file
     try:
-        with open(input_file, mode="r", newline="", encoding="utf-8") as file:
+        with open(input_file, mode="r+", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
 
             # Iterate over each row in the CSV
@@ -1006,15 +1006,22 @@ def apply_filter(row, filter_condition):
     Returns:
     bool: Whether the row satisfies the filter condition.
     """
-    if isinstance(filter_condition, dict):
-        # Simple equality check if filter is a dictionary
-        column = list(filter_condition.keys())[0]
-        value = filter_condition[column]
-        return row.get(column) == value
-    elif callable(filter_condition):
-        # If the filter is a function, apply it to the row
-        return filter_condition(row)
-    else:
-        raise ValueError(
-            "Invalid filter condition. It should be either a dictionary or a function."
-        )
+    try:
+        if not (isinstance(filter_condition, dict)):
+            temp = filter_condition.split("=")
+            filter_condition = {temp[0]: temp[1]}
+        if isinstance(filter_condition, dict):
+            # Simple equality check if filter is a dictionary
+            column = list(filter_condition.keys())[0]
+            value = filter_condition[column]
+            return row.get(column) == value
+        elif callable(filter_condition):
+            # If the filter is a function, apply it to the row
+            return filter_condition(row)
+        else:
+            raise ValueError(
+                "Invalid filter condition. It should be either a dictionary or a function."
+            )
+    except:
+        print("*****************UNABLE TO DO COMPLEX FILTERS**************************")
+        return True
