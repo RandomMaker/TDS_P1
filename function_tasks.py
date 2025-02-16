@@ -65,6 +65,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from typing import Callable, get_type_hints, Dict, Any, Tuple, Optional, List
 from pydantic import create_model, BaseModel
 import re
+from PIL import Image as PImage
 
 dotenv.load_dotenv()
 
@@ -631,7 +632,7 @@ def clone_git_repo_and_commit(repo_url: str, output_dir: str, commit_message: st
         subprocess.run(["git", "clone", repo_url, output_dir], shell=True, check=True)
         subprocess.run(["git", "add", "."], cwd=output_dir, shell=True, check=True)
         subprocess.run(
-            ["git", "commit", "-m", commit_message],
+            ["git", "commit", "--allow-empty", "-m", commit_message],
             cwd=output_dir,
             shell=True,
             check=True,
@@ -681,9 +682,7 @@ def run_sql_query_on_database(
 
 
 # Scrape a webpage
-def scrape_webpage(
-    url: str, output_file: str = None, tag: str = None, attrs: list = None
-):
+def scrape_webpage(url: str, output_file: str = None, tag: str = None):
     """
     Scrapes a website, extracting either specific tags or the entire HTML content.
 
@@ -691,14 +690,12 @@ def scrape_webpage(
     url (str): The URL of the website to scrape.
     output_file (str, optional): The file path where the scraped content will be saved. If not provided, no file will be saved.
     tag (str, optional): The specific HTML tag to extract. If not provided, the entire HTML page will be scraped.
-    attrs (list, optional): A list that contains a single dictionary element of attributes to filter the tag by (e.g., [{'class': 'example'}]).
-                            Used only if a tag is specified.
 
     Returns:
     str: The extracted HTML content or an error message.
 
     Example:
-    >>> scrape_webpage('https://www.example.com', tag='p', attrs=[{'class': 'description'}])
+    >>> scrape_webpage('https://www.example.com', tag='a', output_file='page.html')
     'This is an example paragraph with the class description.'
 
     >>> scrape_webpage('https://www.example.com', output_file='page.html')
@@ -711,23 +708,24 @@ def scrape_webpage(
         response.raise_for_status()  # Will raise an HTTPError for bad responses (4xx, 5xx)
 
         # Parse the page content using BeautifulSoup
-        soup = BeautifulSoup(response.text, "html.parser")
+        soup = BeautifulSoup(response.content, "html.parser")
 
         # Extract specific tag(s) or the entire HTML content
         if tag:
-            elements = soup.find_all(tag, attrs=attrs[0])
+            elements = soup.find_all(tag)
             extracted_content = "\n".join(str(element) for element in elements)
+            print(extracted_content)
         else:
             extracted_content = soup.prettify()
 
         # If an output file is provided, save the content
         if output_file:
-            with open(output_file, "w", encoding="utf-8") as file:
+            with open(output_file, "w") as file:
                 file.write(extracted_content)
 
         return extracted_content
 
-    except requests.exceptions.RequestException as e:
+    except Exception as e:
         return f"An error occurred: {e}"
 
 
@@ -740,14 +738,14 @@ def compress_image(
     to_format: str = None,
 ):
     """
-    Compresses an image using various methods: quality reduction, resizing, format change, or color depth reduction.
+    Compresses an image using various methods: quality, resize, format, or grayscale.
 
     Parameters:
     input_path (str): The file path of the image to be compressed.
     output_path (str): The file path to save the compressed image.
     method (str, optional): The method of compression to use. Options: 'quality', 'resize', 'format', 'grayscale'. Default is 'quality'.
     quality (int, optional): The quality of the compressed image (0 to 100). Default is 80. Used if method='quality'.
-    new_size (tuple, optional): The new size for resizing. If not provided, resizing will not occur. Used if method='resize'.
+    new_size (tuple, optional): The new size for resizing (width, height). If not provided, resizing will not occur. Used if method='resize'.
     to_format (str, optional): The new format to save the image in. Default is None. Used if method='format'.
 
     Returns:
@@ -759,25 +757,25 @@ def compress_image(
     """
     try:
         # Open the image file
-        with Image.open(input_path) as img:
+        with PImage.open(input_path) as img:
             # Apply the compression method based on the specified method
-            if method == "quality":
+            if "quality" in method:
                 # Compress the image by reducing its quality
                 img.save(output_path, quality=quality, optimize=True)
                 print(
                     f"Image successfully compressed with quality {quality} and saved as {output_path}"
                 )
 
-            elif method == "resize":
+            elif "resize" in method:
                 # Resize the image
                 if new_size:
-                    img = img.resize(new_size, Image.ANTIALIAS)
+                    img = img.resize((int(new_size[0]), int(new_size[1])))
                     img.save(output_path)
                     print(f"Image resized to {new_size} and saved as {output_path}")
                 else:
                     print("Error: new_size must be specified for resizing.")
 
-            elif method == "format":
+            elif "format" in method:
                 # Change the image format (e.g., JPEG to WebP)
                 if to_format:
                     img.save(output_path, format=to_format, optimize=True)
@@ -785,7 +783,7 @@ def compress_image(
                 else:
                     print("Error: to_format must be specified for changing the format.")
 
-            elif method == "grayscale":
+            elif "grayscale" in method:
                 # Convert image to grayscale (reduces color depth)
                 img = img.convert("L")  # 'L' mode is for grayscale
                 img.save(output_path)
@@ -830,7 +828,7 @@ def convert_markdown_to_html(input_file: str, output_file: str):
         html_content = markdown.markdown(md_content)
 
         # Write the HTML content to the output file
-        with open(output_file, "wr+", encoding="utf-8") as file:
+        with open(output_file, "w", encoding="utf-8") as file:
             file.write(html_content)
 
         print(
@@ -990,7 +988,7 @@ def filter_csv(
                 raise ValueError("Invalid output format. Please use 'json' or 'csv'.")
 
     except FileNotFoundError:
-        raise FileNotFoundError(f"The file '{input_file}' was not found.")
+        pass
     except KeyError as e:
         raise KeyError(f"The column '{e.args[0]}' was not found in the CSV file.")
     except Exception as e:
