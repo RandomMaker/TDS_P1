@@ -3,7 +3,7 @@ FROM python:3.12-slim-bookworm
 RUN apt-get update
 RUN apt-get -y install tk
 RUN apt-get -y install curl
-RUN app-get -y install git
+RUN apt-get -y install git
 
 # Set the working directory in the container
 WORKDIR /app
